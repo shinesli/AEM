@@ -1,4 +1,4 @@
-project(xmr-stak-nvidia)
+project(aeon-stak-nvidia)
 
 cmake_minimum_required(VERSION 3.0.1)
 
@@ -36,9 +36,9 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "${BUILD_TYPE}")
 
-option(XMR-STAK_LARGEGRID "Support large CUDA block count > 128" ON)
-if(XMR-STAK_LARGEGRID)
-    add_definitions("-DXMR_STAK_LARGEGRID=${XMR-STAK_LARGEGRID}")
+option(AEON-STAK_LARGEGRID "Support large CUDA block count > 128" ON)
+if(AEON-STAK_LARGEGRID)
+    add_definitions("-DAEON_STAK_LARGEGRID=${AEON-STAK_LARGEGRID}")
 endif()
 
 set(DEVICE_COMPILER "nvcc")
@@ -57,10 +57,10 @@ set_property(CACHE CUDA_COMPILER PROPERTY STRINGS "${DEVICE_COMPILER}")
 find_package(CUDA 7.5 REQUIRED)
 set(LIBS ${LIBS} ${CUDA_LIBRARIES})
 
-set(XMR-STAK_THREADS 0 CACHE STRING "Set maximum number of threads (for compile time optimization)")
-if(NOT XMR-STAK_THREADS EQUAL 0)
-    message(STATUS "xmr-stak-nvidia: set max threads per block to ${XMR-STAK_THREADS}")
-    add_definitions("-DXMR_STAK_THREADS=${XMR-STAK_THREADS}")
+set(AEON-STAK_THREADS 0 CACHE STRING "Set maximum number of threads (for compile time optimization)")
+if(NOT AEON-STAK_THREADS EQUAL 0)
+    message(STATUS "aeon-stak-nvidia: set max threads per block to ${AEON-STAK_THREADS}")
+    add_definitions("-DAEON_STAK_THREADS=${AEON-STAK_THREADS}")
 endif()
 
 set(CUDA_ARCH "20;30;35;37;50;52;60;61;62" CACHE STRING "Set GPU architecture (semicolon separated list, e.g. '-DCUDA_ARCH=20;35;60')")
@@ -193,40 +193,40 @@ file(GLOB SRCFILES_CRYPTO "crypto/*.c")
 
 if("${CUDA_COMPILER}" STREQUAL "clang")
     # build device code with clang
-    add_library(xmr-stak-nvidiaCuda
+    add_library(aeon-stak-nvidiaCuda
         STATIC
         ${CUDASRCFILES}
     )
-    set_target_properties(xmr-stak-nvidiaCuda PROPERTIES COMPILE_FLAGS ${CLANG_BUILD_FLAGS})
-    set_target_properties(xmr-stak-nvidiaCuda PROPERTIES LINKER_LANGUAGE CXX)
+    set_target_properties(aeon-stak-nvidiaCuda PROPERTIES COMPILE_FLAGS ${CLANG_BUILD_FLAGS})
+    set_target_properties(aeon-stak-nvidiaCuda PROPERTIES LINKER_LANGUAGE CXX)
     set_source_files_properties(${CUDASRCFILES} PROPERTIES LANGUAGE CXX)
 else()
     # build device code with nvcc
-    cuda_add_library(xmr-stak-nvidiaCuda
+    cuda_add_library(aeon-stak-nvidiaCuda
         STATIC
         ${CUDASRCFILES}
     )
 endif()
 
-add_library(xmr-stak-nvidiaCrypto
+add_library(aeon-stak-nvidiaCrypto
     STATIC
     ${SRCFILES_CRYPTO}
 )
-set_property(TARGET xmr-stak-nvidiaCrypto PROPERTY C_STANDARD 99)
+set_property(TARGET aeon-stak-nvidiaCrypto PROPERTY C_STANDARD 99)
 
-add_executable(xmr-stak-nvidia
+add_executable(aeon-stak-nvidia
     ${SRCFILES}
 )
 
 # for gnu compiler <5.1 wee need to activate c++11 by explicit for cuda and all cpp files
 if(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") AND (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 5.1))
-    set_target_properties(xmr-stak-nvidiaCuda PROPERTIES COMPILE_FLAGS -std=c++11)
-    set_target_properties(xmr-stak-nvidia PROPERTIES COMPILE_FLAGS -std=c++11)
+    set_target_properties(aeon-stak-nvidiaCuda PROPERTIES COMPILE_FLAGS -std=c++11)
+    set_target_properties(aeon-stak-nvidia PROPERTIES COMPILE_FLAGS -std=c++11)
 endif()
 
 set(EXECUTABLE_OUTPUT_PATH "bin")
 
-target_link_libraries(xmr-stak-nvidia ${LIBS} xmr-stak-nvidiaCuda xmr-stak-nvidiaCrypto)
+target_link_libraries(aeon-stak-nvidia ${LIBS} aeon-stak-nvidiaCuda aeon-stak-nvidiaCrypto)
 
 ################################################################################
 # Install
@@ -234,7 +234,7 @@ target_link_libraries(xmr-stak-nvidia ${LIBS} xmr-stak-nvidiaCuda xmr-stak-nvidi
 
 # do not install the binary if the project and install are equal
 if( NOT "${CMAKE_INSTALL_PREFIX}" STREQUAL "${PROJECT_BINARY_DIR}" )
-    install(TARGETS xmr-stak-nvidia
+    install(TARGETS aeon-stak-nvidia
             DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 endif()
 

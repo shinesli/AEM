@@ -102,7 +102,7 @@ __global__ void cryptonight_core_gpu_phase1( int threads, int bfactor, int parti
 	const int thread = ( blockDim.x * blockIdx.x + threadIdx.x ) >> 3;
 	const int sub = ( threadIdx.x & 7 ) << 2;
 
-	const int batchsize = 0x80000 >> bfactor;
+	const int batchsize = 0x40000 >> bfactor;
 	const int start = partidx * batchsize;
 	const int end = start + batchsize;
 
@@ -203,7 +203,7 @@ __global__ void cryptonight_core_gpu_phase2( int threads, int bfactor, int parti
 		#pragma unroll 2
 		for ( int x = 0; x < 2; ++x )
 		{
-			j = ( ( shuffle(sPtr,sub, a, 0) & 0x1FFFF0 ) >> 2 ) + sub;
+			j = ( ( shuffle(sPtr,sub, a, 0) & 0x0FFFF0 ) >> 2 ) + sub;
 
 			const uint32_t x_0 = loadGlobal32<uint32_t>( long_state + j );
 			const uint32_t x_1 = shuffle(sPtr,sub, x_0, sub + 1);
@@ -221,8 +221,8 @@ __global__ void cryptonight_core_gpu_phase2( int threads, int bfactor, int parti
 			//long_state[j] = d[0] ^ d[1];
 			storeGlobal32( long_state + j, d[0] ^ d[1] );
 
-			//MUL_SUM_XOR_DST(c, a, &long_state[((uint32_t *)c)[0] & 0x1FFFF0]);
-			j = ( ( *t1 & 0x1FFFF0 ) >> 2 ) + sub;
+			//MUL_SUM_XOR_DST(c, a, &long_state[((uint32_t *)c)[0] & 0x0FFFF0]);
+			j = ( ( *t1 & 0x0FFFF0 ) >> 2 ) + sub;
 
 			uint32_t yy[2];
 			*( (uint64_t*) yy ) = loadGlobal64<uint64_t>( ( (uint64_t *) long_state )+( j >> 1 ) );
@@ -261,7 +261,7 @@ __global__ void cryptonight_core_gpu_phase3( int threads, int bfactor, int parti
 	int thread = ( blockDim.x * blockIdx.x + threadIdx.x ) >> 3;
 	int sub = ( threadIdx.x & 7 ) << 2;
 
-	const int batchsize = 0x80000 >> bfactor;
+	const int batchsize = 0x40000 >> bfactor;
 	const int start = partidx * batchsize;
 	const int end = start + batchsize;
 
