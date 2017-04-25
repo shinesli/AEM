@@ -23,6 +23,7 @@
 
 #include <assert.h>
 #include <cmath>
+#include <cstdlib>
 #include <chrono>
 #include <thread>
 #include "console.h"
@@ -47,7 +48,7 @@ void thd_setaffinity(std::thread::native_handle_type h, uint64_t cpu_id)
 {
 #if defined(__APPLE__)
 	thread_port_t mach_thread;
-	thread_affinity_policy_data_t policy = { cpu_id };
+	thread_affinity_policy_data_t policy = { (int)cpu_id };
 	mach_thread = pthread_mach_thread_np(h);
 	thread_policy_set(mach_thread, THREAD_AFFINITY_POLICY, (thread_policy_t)&policy, 1);
 #else
@@ -172,12 +173,12 @@ bool minethd::self_test()
 	if(jconf::inst()->HaveHardwareAes())
 	{
 		cryptonight_hash_ctx("This is a test", 14, out, ctx0);
-		bResult = memcmp(out, "\xa0\x84\xf0\x1d\x14\x37\xa0\x9c\x69\x85\x40\x1b\x60\xd4\x35\x54\xae\x10\x58\x02\xc5\xf5\xd8\xa9\xb3\x25\x36\x49\xc0\xbe\x66\x05", 32) == 0;
+		bResult = memcmp(out, "\x88\xe5\xe6\x84\xdb\x17\x8c\x82\x5e\x4c\xe3\x80\x9c\xcc\x1c\xda\x79\xcc\x2a\xdb\x44\x06\xbf\xf9\x3d\xeb\xea\xf2\x0a\x8b\xeb\xd9", 32) == 0;
 	}
 	else
 	{
 		cryptonight_hash_ctx_soft("This is a test", 14, out, ctx0);
-		bResult = memcmp(out, "\xa0\x84\xf0\x1d\x14\x37\xa0\x9c\x69\x85\x40\x1b\x60\xd4\x35\x54\xae\x10\x58\x02\xc5\xf5\xd8\xa9\xb3\x25\x36\x49\xc0\xbe\x66\x05", 32) == 0;
+		bResult = memcmp(out, "\x88\xe5\xe6\x84\xdb\x17\x8c\x82\x5e\x4c\xe3\x80\x9c\xcc\x1c\xda\x79\xcc\x2a\xdb\x44\x06\xbf\xf9\x3d\xeb\xea\xf2\x0a\x8b\xeb\xd9", 32) == 0;
 	}
 	delete ctx0;
 
