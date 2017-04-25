@@ -1,6 +1,6 @@
-# XMR-Stak-NVIDIA - Monero mining software
+# AEON-Stak-NVIDIA - Aeon mining software
 
-XMR-Stak is a universal Stratum pool miner. This is the NVIDIA GPU mining version; there is also an [AMD GPU version](https://github.com/fireice-uk/xmr-stak-amd), and a [CPU version](https://github.com/fireice-uk/xmr-stak-cpu).
+AEON-Stak is a universal Stratum pool miner. This is the NVIDIA GPU mining version; there is also an [AMD GPU version](https://github.com/shyba/aeon-stak-amd), and a [CPU version](https://github.com/shyba/aeon-stak-cpu).
 
 ## HTML reports
 
@@ -12,7 +12,7 @@ The hashrate shown above was generated on an overclocked GTX 1070.
 1) Edit the config.txt file to enter your pool login and password. 
 2) Double click the exe file. 
 
-XMR-Stak should compile on any C++11 compliant compiler. Windows compiler is assumed to be MSVC 2015 CE. MSVC build environment is not vendored.
+AEON-Stak should compile on any C++11 compliant compiler. Windows compiler is assumed to be MSVC 2015 CE. MSVC build environment is not vendored.
 
 ```
 -----BEGIN PGP SIGNED MESSAGE-----
@@ -89,6 +89,11 @@ psychocrypt:
 43NoJVEXo21hGZ6tDG6Z3g4qimiGdJPE6GRxAmiWwm26gwr62Lqo7zRiCJFSBmbkwTGNuuES9ES5TgaVHceuYc4Y75txCTU
 ```
 
+stoffu:
+```
+42vPNJUkQxdgHguyCoZNHeeiKwf5bTHUUiBRnjvuuATf71FmKJg81YCgwWYwdEjjAP6FqJdVGzW89dQkGNWFtxhdRskCMan
+```
+
 ## Common Issues
 
 **msvcp140.dll and vcruntime140.dll not available errors**
@@ -102,7 +107,7 @@ The build system is CMake, if you are not familiar with CMake you can learn more
 
 ### Short Description
 
-There are two easy ways to set variables for `cmake` to configure *xmr-stak-nvidia*
+There are two easy ways to set variables for `cmake` to configure *aeon-stak-nvidia*
 - use the ncurses GUI
   - `ccmake .`
   - edit your options
@@ -118,10 +123,10 @@ or
 `make -j install` for faster parallel build
 and install.
 
-### xmr-stak-nvidia Compile Options
+### aeon-stak-nvidia Compile Options
 - `CMAKE_INSTALL_PREFIX` install miner to the home folder
-  - `cmake . -DCMAKE_INSTALL_PREFIX=$HOME/xmr-stak-nvidia`
-  - you can find the binary and the `config.txt` file after `make install` in `$HOME/xmr-stak-nvidia/bin`
+  - `cmake . -DCMAKE_INSTALL_PREFIX=$HOME/aeon-stak-nvidia`
+  - you can find the binary and the `config.txt` file after `make install` in `$HOME/aeon-stak-nvidia/bin`
 -`CMAKE_BUILD_TYPE` set the build type
   - valid options: `Release` or `Debug`
   - you should always keep `Release` for your productive miners
@@ -144,13 +149,13 @@ and install.
 - `OpenSSL_REQUIRED`allow to disable/enable the dependency *OpenSSL*
   - by default enabled
   - it is not possible to connect to a *TLS* secured pool if optin is disabled: `cmake . -DOpenSSL_REQUIRED=OFF`
-- `XMR-STAK_LARGEGRID` use `32` or `64` bit integer for on device indices
+- `AEON-STAK_LARGEGRID` use `32` or `64` bit integer for on device indices
   - default is enabled
-  - on old GPUs it can increase the hash rate if disabled: `cmake . -DXMR-STAK_LARGEGRID=OFF`
+  - on old GPUs it can increase the hash rate if disabled: `cmake . -DAEON-STAK_LARGEGRID=OFF`
   - if disabled it is not allowed to use more than `1000` threads on the device
-- `XMR-STAK_THREADS` give the compiler information which value for `threads` is used at runtime
+- `AEON-STAK_THREADS` give the compiler information which value for `threads` is used at runtime
   - default is `0` (compile time optimization)
-  - if the miner is compiled and used at runtime with the some value it can increase the hash rate: `cmake . -DXMR-STAK_THREADS=32`
+  - if the miner is compiled and used at runtime with the some value it can increase the hash rate: `cmake . -DAEON-STAK_THREADS=32`
 
 ## Tune Performance `config.txt`
 

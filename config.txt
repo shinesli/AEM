@@ -35,11 +35,11 @@ null,
 "tls_fingerprint" : "",
 
 /*
- * pool_address	  - Pool address should be in the form "pool.supportxmr.com:3333". Only stratum pools are supported.
+ * pool_address	  - Pool address should be in the form "aeon.sumominer.com:3333". Only stratum pools are supported.
  * wallet_address - Your wallet, or pool login.
  * pool_password  - Can be empty in most cases or "x".
  */
-"pool_address" : "pool.supportxmr.com:3333",
+"pool_address" : "aeon.sumominer.com:3333",
 "wallet_address" : "",
 "pool_password" : "",
 

@@ -133,9 +133,10 @@ int main(int argc, char *argv[])
 #endif
 
 	printer::inst()->print_str("-------------------------------------------------------------------\n");
-	printer::inst()->print_str("XMR-Stak-NVIDIA mining software, NVIDIA Version.\n");
+	printer::inst()->print_str("AEON-Stak-NVIDIA mining software, NVIDIA Version.\n");
 	printer::inst()->print_str("NVIDIA mining code was written by KlausT and psychocrypt.\n");
 	printer::inst()->print_str("Brought to you by fireice_uk under GPLv3.\n\n");
+	printer::inst()->print_str("Original XMR-Stak-NVIDIA adapted to AEON by stoffu.\n\n");
 	char buffer[64];
 	snprintf(buffer, sizeof(buffer), "Configurable dev donation level is set to %.1f %%\n\n", fDevDonationLevel * 100.0);
 	printer::inst()->print_str(buffer);
