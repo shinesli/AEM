@@ -1,0 +1,81 @@
+version: 1.0.{build}
+configuration: Release
+platform: x64
+before_build:
+- cmd: >-
+    7z a aeon-stak-nvidia-source.zip C:\projects\aeon-stak-nvidia\
+
+
+    git clone -q https://github.com/svn2github/libmicrohttpd build\microhttpd
+
+    pwd
+
+    ls
+
+    cd build\microhttpd\w32\VS2015
+
+    git checkout -qf 82ee737a39be28a32048248655d780ad8a240939
+
+    msbuild libmicrohttpd.sln /property:Configuration=Release-static /property:Platform=x64 /target:libmicrohttpd /verbosity:minimal
+
+
+    cd ..\..\..\..
+
+    pwd
+
+    ls
+
+    cmake --version
+
+    ls C:\projects\aeon-stak-nvidia\build\microhttpd\w32\VS2015\Output\x64
+
+    cp C:\projects\aeon-stak-nvidia\build\microhttpd\w32\VS2015\Output\x64\libmicrohttpd.lib microhttpd.lib
+
+    curl -o pthreads-w32-2-9-1-release.zip http://www.mirrorservice.org/sites/sources.redhat.com/pub/pthreads-win32/pthreads-w32-2-9-1-release.zip
+
+    7z x -y pthreads-w32-2-9-1-release.zip -oC:\projects\pthreads-w32
+
+    cp C:\projects\pthreads-w32\Pre-built.2\lib\x64\pthreadVC2.lib pthread.lib
+
+
+    appveyor DownloadFile https://developer.nvidia.com/compute/cuda/8.0/prod/local_installers/cuda_8.0.44_windows-exe -FileName cuda_8.0.44_windows.exe
+
+    echo Installing CUDA toolkit 8
+
+    cuda_8.0.44_windows.exe -s compiler_8.0 cublas_8.0 cublas_dev_8.0 cudart_8.0 curand_8.0 curand_dev_8.0
+
+    set PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v8.0\libnvvp;%PATH%
+
+    dir "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA"
+
+    dir "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0"
+
+    dir "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin"
+
+    nvcc -V
+
+
+    cmake -DCMAKE_LIBRARY_PATH="C:\projects\aeon-stak-nvidia\build\microhttpd\w32\VS2015\Output\x64" -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_CXX_FLAGS="/MD" -DCMAKE_CXX_FLAGS_STATIC="/MD" -G "Visual Studio 14 2015 Win64" -D CUDA_TOOLKIT_ROOT_DIR="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0" .
+
+    ls
+
+    cat C:\projects\aeon-stak-nvidia\aeon-stak-nvidia.vcxproj
+
+    cp C:/OpenSSL-Win64/lib/VC/libeay32MD.lib crypto.lib
+
+    cp C:/OpenSSL-Win64/lib/VC/ssleay32MD.lib ssl.lib
+
+    curl -fsS -o libmicrohttpd.zip http://mirror.clarkson.edu/gnu/libmicrohttpd/libmicrohttpd-0.9.53-w32-bin.zip
+
+    7z x libmicrohttpd.zip -aoa -olibmicro
+
+    cp libmicro/libmicrohttpd-0.9.53-w32-bin/x86_64/VS2015/Release-static/* .
+build:
+  project: aeon-stak-nvidia.vcxproj
+  parallel: true
+  verbosity: minimal
+after_build:
+- cmd: 7z a aeon-stak-nvidia.zip C:\projects\aeon-stak-nvidia\bin\RELEASE\aeon-stak-nvidia.exe C:\projects\aeon-stak-nvidia\config.txt C:/OpenSSL-Win64/*.dll "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/bin/*.dll"
+artifacts:
+- path: aeon-stak-nvidia-source.zip
+- path: aeon-stak-nvidia.zip
